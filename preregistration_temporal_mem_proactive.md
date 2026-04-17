@@ -13,7 +13,7 @@ Does memory consolidation quality causally affect proactive agent performance? W
 
 ### H1: Semantic Coherence Dominates Temporal Ordering
 
-**Hypothesis**: Semantic coherence degradation will impact proactive performance more than temporal ordering degradation (both SimpleMem and TiMem systems).
+**Hypothesis**: Semantic coherence degradation will impact proactive performance more than temporal ordering degradation (both SimpleMem and Mem0 systems).
 
 **Rationale**: Latent need detection requires thematic clustering of user behavior patterns rather than chronological accuracy.
 
