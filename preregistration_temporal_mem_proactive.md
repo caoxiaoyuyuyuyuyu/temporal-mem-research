@@ -32,7 +32,7 @@ Does memory consolidation quality causally affect proactive agent performance? W
 
 **Rationale**: Consolidated summaries need only capture key behavioral patterns. Below ~50% information density, patterns become unrecoverable.
 
-**Statistical Test**: Test whether F1 at 50% degradation < linear interpolation between 0% and 100% endpoints. Paired bootstrap (n=10,000), one-sided.
+**Statistical Test**: Session-level Wilcoxon signed-rank test, one-sided (H0: Δ ≥ 0), where Δ = F1(50%) - [F1(0%) + F1(100%)]/2 for each session (n=100 sessions).
 
 **Success Criterion**: F1 at 50% < linear interpolation; bootstrap 95% CI excludes zero.
 
@@ -61,14 +61,14 @@ Does memory consolidation quality causally affect proactive agent performance? W
 ## Experimental Design
 
 ### Memory Systems
-- **Primary**: SimpleMem + second consolidation system [TiMem preferred; fallback to MemReader or Mem0 (local consolidation mode) if TiMem API key unavailable or TiMem does not support local LLM endpoint] (both full degradation curves, 4 dims × 5 levels)
-  - Fallback trigger: TiMem requires cloud-only API key that conflicts with controlled-backbone design requirement.
+- **Primary**: SimpleMem + Mem0 (fact extraction consolidation, local vLLM endpoint via mem0ai) — both full degradation curves, 4 dims × 5 levels
+  - Note: TiMem was originally planned as second system but excluded because it requires a cloud-only API key incompatible with our controlled-backbone design requirement (all systems must use the same local vLLM endpoint).
 - **Baseline**: RAG-only anchor (0% degradation)
-- **Dimensional Atlas**: Mem0 + 1 additional (natural CQS profile, no degradation)
+- **Dimensional Atlas**: 1 additional system (natural CQS profile, no degradation)
 
 ### Benchmark
 - **Primary**: LatentNeeds-Bench (PASK, github.com/xzf-thu/Pask) — 100 sessions, 3,936 turns, CC BY-NC-SA 4.0
-- **Cross-validation**: ProactiveBench (github.com/thunlp/ProactiveAgent)
+- **Cross-validation**: TBD (ProactiveBench excluded due to insufficient session count (12 sessions); PARE excluded due to no public data release; LatentNeeds-Bench is primary benchmark)
 
 ### Degradation Protocol
 - **Dimensions (4)**: (a) Temporal Coverage — random entry dropping; (b) Temporal Ordering — timestamp shuffling; (c) Semantic Coherence — cross-topic entity replacement; (d) Compression Fidelity — replace consolidated summaries with truncated raw episodes
@@ -97,7 +97,7 @@ CQS = arithmetic mean of four normalized sub-metrics (equal weights).
 
 | Failure | Response |
 |---------|----------|
-| LatentNeeds-Bench insensitive to memory quality | Switch to ProactiveBench as primary |
+| LatentNeeds-Bench insensitive to memory quality | Reframe as null-result study or postpone to ICLR 2027 |
 | H3 prerequisite fails | H3 downgraded to exploratory |
 | TiMem incompatible with local LLM | Replace with Mem0 or MemReader |
 | All effects null | Reframe as null result |
