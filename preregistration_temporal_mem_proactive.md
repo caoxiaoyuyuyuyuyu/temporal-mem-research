@@ -21,6 +21,11 @@ Does memory consolidation quality causally affect proactive agent performance? W
 
 **Success Criterion**: Both systems show semantic coherence slope > temporal ordering slope; one-sided bootstrap p < 0.05.
 
+**Result interpretation**:
+- Both systems show semantic_slope > temporal_slope (p < 0.05) → H1 CONFIRMED
+- One system significant, one not → H1 PARTIAL (exploratory; analyze possible explanations for divergence)
+- Neither system significant → H1 NULL
+
 ### H2: Compression Fidelity Shows Non-Linear (Concave) Degradation
 
 **Hypothesis**: Compression fidelity follows a concave degradation curve: stable until >50% degradation, then sharp drop.
@@ -49,14 +54,15 @@ Does memory consolidation quality causally affect proactive agent performance? W
 
 **Constraint**: We do NOT claim to identify functional form (power/sigmoid/piecewise) — 5 data points are insufficient. Only direction of non-linearity is reported.
 
-**Statistical Test**: Wilcoxon signed-rank test on deviations of 25%/50%/75% points from linear interpolation (Bonferroni corrected for 4 dimensions). Exploratory.
+**Statistical Test**: Wilcoxon signed-rank test on deviations of 25%/50%/75% points from linear interpolation. Bonferroni correction applied to 2 confirmatory dimensions only (semantic coherence + compression fidelity): α = 0.05/2 = 0.025. Temporal ordering and temporal coverage treated as exploratory (uncorrected α = 0.05). Exploratory.
 
 **Success Criterion**: ≥2 of 4 dimensions show significant non-linear deviation (exploratory only).
 
 ## Experimental Design
 
 ### Memory Systems
-- **Primary**: SimpleMem + TiMem (both full degradation curves, 4 dims × 5 levels)
+- **Primary**: SimpleMem + second consolidation system [TiMem preferred; fallback to MemReader or Mem0 (local consolidation mode) if TiMem API key unavailable or TiMem does not support local LLM endpoint] (both full degradation curves, 4 dims × 5 levels)
+  - Fallback trigger: TiMem requires cloud-only API key that conflicts with controlled-backbone design requirement.
 - **Baseline**: RAG-only anchor (0% degradation)
 - **Dimensional Atlas**: Mem0 + 1 additional (natural CQS profile, no degradation)
 
